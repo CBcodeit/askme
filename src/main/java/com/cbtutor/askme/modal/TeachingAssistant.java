@@ -33,32 +33,34 @@ public class TeachingAssistant extends User implements Resolver {
     @Override
     public void update(Request request) {
         //conditionally accept request with synchronization
-        if(this.getTopicSet().contains(request.getTopic())){
-            Slot slot = getCompatibleSlot(request);
-            if(slot==null){
-                //this TA's slot not available for requested slot and hence keep request in queue
-                System.out.println("Request can not be Accepted");
-                return;
-            }
-            //process request
-            //....
-            //....
-            //....
-            request.getCurrentRequestStatus().updateRequestStatus(request,AcceptedRequestStatus.getAcceptedRequestStatusInstance());
-            System.out.println("Request Accepted");
+        boolean isTaCompatibleForRequest = checkTaCompatibleForRequest(request);
+        if(!isTaCompatibleForRequest){
+            System.out.println("Request can not be Accepted as this TA's expertise is not matching with request");
             return;
         }
-        System.out.println("Request can not be Accepted");
+
+        Slot taSlot = getCompatibleSlotOfTA(request);
+        if(taSlot==null){
+            System.out.println("Request can not be Accepted as this TA's slot not available for requested slot");
+            return;
+        }
+
+        acceptRequest(request,taSlot);
+        System.out.println("Request Accepted");
+
     }
 
-    private void bookSlot(Request request){
+    private boolean checkTaCompatibleForRequest(Request request){
+        return this.getTopicSet().contains(request.getTopic());
+    }
+
+    private void acceptRequest(Request request,Slot taSlot){
         //additional logic to decide/intervene TA manually if proceed to book slot
-        slot.setBooked(true);
-        request.getCurrentRequestStatus().updateRequestStatus(request);
-
+        taSlot.setBooked(true);
+        request.getCurrentRequestStatus().updateRequestStatus(request,AcceptedRequestStatus.getAcceptedRequestStatusInstance());
     }
 
-    public Slot getCompatibleSlot(Request request){
+    private Slot getCompatibleSlotOfTA(Request request){
         for (Slot slot : this.getSlotSet()) {
                 if(slot.getTime().equals(request.getSlot().getTime()) && slot.isActive() && !slot.isBooked()){
                        return slot;
