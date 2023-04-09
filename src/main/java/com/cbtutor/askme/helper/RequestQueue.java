@@ -12,6 +12,8 @@ public interface RequestQueue {
     public void attach(TeachingAssistant teachingAssistant);
     public void detach(TeachingAssistant teachingAssistant);
     public void notifyUpdate(Request request);
+
+    public List<Request> getRequestList();
 }
 
 

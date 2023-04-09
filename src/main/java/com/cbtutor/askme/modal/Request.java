@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -25,7 +26,8 @@ public class Request {
 
     private Slot slot;
 
-    public Request(Topic topic,String description,Slot slot){
+    public Request(int id, Topic topic,String description,Slot slot){
+        this.id = id;
         this.topic = topic;
         this.description = description;
         this.slot = slot;
@@ -34,6 +36,28 @@ public class Request {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Request)) return false;
+        Request request = (Request) o;
+        return getId() == request.getId() && getTopic() == request.getTopic() && Objects.equals(getDescription(), request.getDescription());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getTopic(),getDescription());
+    }
+
+    @Override
+    public String toString() {
+        return "Request{" +
+                "id=" + id +
+                ", topic=" + topic +
+                ", description='" + description + '\'' +
+                ", slot=" + slot +
+                '}';
+    }
 }
 
 /*

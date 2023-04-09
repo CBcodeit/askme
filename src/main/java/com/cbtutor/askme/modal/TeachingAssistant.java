@@ -68,4 +68,13 @@ public class TeachingAssistant extends User implements Resolver {
         }
         return null;
     }
+
+
+    @Override
+    public String toString() {
+        return "TeachingAssistant{" +
+                "salary=" + salary +
+                ", topicSet=" + topicSet +
+                '}';
+    }
 }

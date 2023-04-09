@@ -19,9 +19,22 @@ public class RaisedRequestStatus implements RequestStatus{
 
     @Override
     public void updateRequestStatus(Request request,RequestStatus requestStatus) {
-        if(requestStatus.equals())
-        //accept request
-        request.setCurrentRequestStatus(AcceptedRequestStatus.getAcceptedRequestStatusInstance());
-        System.out.println("Request is accepted!!");
+        if(requestStatus instanceof AcceptedRequestStatus) {
+            request.setCurrentRequestStatus(AcceptedRequestStatus.getAcceptedRequestStatusInstance());
+            System.out.println("Request is accepted!!");
+            return;
+        }
+
+        if(requestStatus instanceof CancelledRequestStatus) {
+            request.setCurrentRequestStatus(CancelledRequestStatus.getCancelledRequestStatusInstance());
+            System.out.println("Request is cancelled!!");
+            return;
+        }
+
+        if(requestStatus instanceof HoldRequestStatus) {
+            request.setCurrentRequestStatus(HoldRequestStatus.getHoldRequestStatusInstance());
+            System.out.println("Request is on Hold!!");
+            return;
+        }
     }
 }

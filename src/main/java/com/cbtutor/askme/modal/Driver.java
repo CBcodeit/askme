@@ -15,7 +15,7 @@ public class Driver {
 
     public static void main(String a[]){
 
-        System.out.print("Hi");
+        System.out.print("I am Driver. Let's Go and explore AskMe");
 
         //get producers and consumers set ready
         List<Student> students = UserService.createStudent();
@@ -29,19 +29,51 @@ public class Driver {
 
         //ask students to raise requests
         Request request = null;
-        request = students.get(0).getRequestManagementService().raiseRequest(Topic.ADMISSION,"When does admission starts?",new Slot("11.30",true,false));
-        students.get(0).getRequestSet().add(request);
+        Request request0 = students.get(0).getRequestManagementService().raiseRequest(1,Topic.ADMISSION,"When does admission starts?",new Slot("11.30",true,false));
+        students.get(0).getRequestSet().add(request0);
 
-        request = students.get(1).getRequestManagementService().raiseRequest(Topic.LLD,"What is abstraction in oops?",new Slot("12.00",true,false));
-        students.get(1).getRequestSet().add(request);
+        Request request1 = students.get(1).getRequestManagementService().raiseRequest(2,Topic.LLD,"What is abstraction in oops?",new Slot("12.00",true,false));
+        students.get(1).getRequestSet().add(request1);
 
-        request = students.get(2).getRequestManagementService().raiseRequest(Topic.HLD,"How laod balancers work?",new Slot("2.30",true,false));
-        students.get(2).getRequestSet().add(request);
+        Request request2 = students.get(2).getRequestManagementService().raiseRequest(3,Topic.HLD,"How laod balancers work?",new Slot("2.30",true,false));
+        students.get(2).getRequestSet().add(request2);
 
-        request = students.get(0).getRequestManagementService().raiseRequest(Topic.DSA,"how to implement stack using queue?",new Slot("2.30",true,false));
-        students.get(0).getRequestSet().add(request);
+        Request request4 = students.get(0).getRequestManagementService().raiseRequest(4,Topic.DSA,"how to implement stack using queue?",new Slot("2.30",true,false));
+        students.get(0).getRequestSet().add(request4);
 
         //ask Students to cancel request
-        students.get(0).getRequestSet().g getRequestManagementService().cancelRequest()
+        cancelRequest(request4,students.get(0));
+
+        //ask Students to hold request
+        holdRequest(request4,students.get(0));
+
+
+
+    }
+
+    public static void cancelRequest(Request requestToBeCancelled, Student student){
+        Request requestCanceled = null;
+        for (Request req : student.getRequestSet()) {
+            if(req.equals(requestToBeCancelled)){
+                requestCanceled = student.getRequestManagementService().cancelRequest(req);
+                break;
+            }
+        }
+        if(requestCanceled!=null){
+            student.getRequestSet().remove(requestCanceled);
+            System.out.println("Request successfully removed from students request list. " +
+                    "Request details: "+requestCanceled);
+        }
+    }
+
+    public static void holdRequest(Request requestToBeHeld, Student student){
+        Request requestHeld = null;
+        for (Request req : student.getRequestSet()) {
+            if(req.equals(requestToBeHeld)){
+                requestHeld = student.getRequestManagementService().holdRequest(req);
+                break;
+            }
+        }
+
     }
 }

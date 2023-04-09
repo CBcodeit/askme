@@ -17,5 +17,10 @@ public class Student extends User{
         this.score = score;
     }
 
-
+    @Override
+    public String toString() {
+        return "Student{" +
+                "score=" + score +
+                '}';
+    }
 }

@@ -19,29 +19,25 @@ public class RequestManagementService {
         requestQueue = RequestQueueImpl.getRequestQueueImplInstance();
     }
 
-    private Request createRequest(Topic topic,String description, Slot requestedSlot){
-        Request request = new Request(topic,description,requestedSlot);
+    private Request createRequest(int requestId, Topic topic,String description, Slot requestedSlot){
+        Request request = new Request(requestId,topic,description,requestedSlot);
         return request;
     }
 
-    public Request raiseRequest(Topic topic,String description, Slot requestedSlot){
-
-        /*
-            1. create request
-            2. add request to queue
-         */
+    public Request raiseRequest(int requestId,Topic topic,String description, Slot requestedSlot){
+        //create request
         Request request = null;
         try{
-            request = createRequest(topic,description,requestedSlot);
+            request = createRequest(requestId,topic,description,requestedSlot);
         }catch(Exception e){
-            System.out.println("Could not create request");
+            System.out.println("Could not create request. Some Exception occurred: "+e.getMessage());
         }
 
         //add request to Queue so that queue can push notifications to it's subscribers(TAs)
         try{
             requestQueue.publish(request);
         }catch(Exception e){
-            System.out.println("Could not create request");
+            System.out.println("Could not publish request. Some Exception occurred: "+e.getMessage());
         }
 
         return request;
@@ -51,8 +47,27 @@ public class RequestManagementService {
         //remove request from Queue
         //
         //....
-
-        return request;
+        Request cancelledRequest = null;
+        try{
+            boolean isRequestRemoved = requestQueue.getRequestList().remove(request);
+            if(isRequestRemoved)
+               cancelledRequest = request;
+        }catch(Exception e){
+            System.out.println("Could not cancel request. Some exception occurred: "+e.getMessage());
+        }
+        return cancelledRequest;
     }
 
+    public Request holdRequest(Request request) {
+        //.....
+        Request heldRequest = null;
+        try{
+            boolean isRequestHeld = requestQueue.getRequestList().remove(request);
+            if(isRequestHeld)
+                heldRequest = request;
+        }catch(Exception e){
+            System.out.println("Could not held request. Some exception occurred: "+e.getMessage());
+        }
+        return heldRequest;
+    }
 }
